@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ComProtec | Cámaras, Redes, Cercos Eléctricos y Soft Restaurant</title>
+<meta name="description" content="ComProtec: proyectos de cámaras de seguridad, cercos eléctricos, redes e infraestructura, y distribución de Soft Restaurant en todo México.">
+<link rel="icon" href="C:\Users\Monto\Downloads\Compu\logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --black:#0B0B0D;
+    --black-2:#151517;
+    --black-3:#1D1D20;
+    --black-4:#242427;
+    --red:#E1261C;
+    --red-bright:#FF4438;
+    --red-dark:#8C1712;
+    --red-glow:rgba(225,38,28,0.35);
+    --green:#2ED573;
+    --white:#F5F5F3;
+    --gray:#9CA0A6;
+    --gray-dim:#6b6f74;
+    --line:rgba(245,245,243,0.09);
+    --line-2:rgba(245,245,243,0.16);
+    --radius:18px;
+    --maxw:1180px;
+    --ease:cubic-bezier(.16,.84,.44,1);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--black);
+    color:var(--white);
+    font-family:'Inter',sans-serif;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  h1,h2,h3,.display{font-family:'Poppins',sans-serif;}
+  .mono{font-family:'JetBrains Mono',monospace;letter-spacing:0.06em;}
+  a{color:inherit;text-decoration:none;}
+  img{display:block;max-width:100%;}
+  button{font-family:inherit;}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px;}
+  ::selection{background:var(--red);color:var(--white);}
+  :focus-visible{outline:2px solid var(--red);outline-offset:3px;border-radius:4px;}
+
+  /* Background grid, echoes "infraestructura de redes" */
+  .grid-bg{
+    position:fixed;inset:0;z-index:0;pointer-events:none;
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size:64px 64px;
+    -webkit-mask-image:radial-gradient(ellipse 90% 60% at 50% 0%, black 30%, transparent 75%);
+            mask-image:radial-gradient(ellipse 90% 60% at 50% 0%, black 30%, transparent 75%);
+    opacity:0.5;
+  }
+
+  /* Scroll progress */
+  .progress{position:fixed;top:0;left:0;height:2.5px;background:linear-gradient(90deg,var(--red),var(--red-bright));z-index:100;width:0%;transition:width .1s linear;}
+
+  /* ---------- REVEAL ---------- */
+  .reveal{opacity:0;transform:translateY(22px);transition:opacity .7s var(--ease), transform .7s var(--ease);}
+  .reveal.in-view{opacity:1;transform:translateY(0);}
+  .reveal-stagger.in-view > *{opacity:1;transform:translateY(0);}
+  .reveal-stagger > *{opacity:0;transform:translateY(18px);transition:opacity .6s var(--ease), transform .6s var(--ease);}
+  .reveal-stagger.in-view > *:nth-child(1){transition-delay:.02s;}
+  .reveal-stagger.in-view > *:nth-child(2){transition-delay:.08s;}
+  .reveal-stagger.in-view > *:nth-child(3){transition-delay:.14s;}
+  .reveal-stagger.in-view > *:nth-child(4){transition-delay:.2s;}
+  .reveal-stagger.in-view > *:nth-child(5){transition-delay:.26s;}
+  .reveal-stagger.in-view > *:nth-child(6){transition-delay:.32s;}
+
+  /* ---------- HEADER ---------- */
+  header{
+    position:sticky;top:0;z-index:50;
+    background:rgba(11,11,13,0.82);
+    backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav{display:flex;align-items:center;justify-content:space-between;height:84px;}
+  .brand{display:flex;align-items:center;gap:12px;}
+  .brand-badge{
+    display:flex;align-items:center;
+    background:var(--black-3);
+    border:1px solid var(--line-2);
+    border-radius:16px;
+    padding:7px 12px;
+    box-shadow:0 0 0 1px rgba(225,38,28,0.12), 0 6px 18px -8px rgba(225,38,28,0.35);
+    transition:box-shadow .2s ease, border-color .2s ease, transform .2s ease;
+  }
+  .brand:hover .brand-badge{
+    border-color:rgba(225,38,28,0.5);
+    box-shadow:0 0 0 1px rgba(225,38,28,0.25), 0 10px 24px -8px rgba(225,38,28,0.5);
+    transform:translateY(-1px);
+  }
+  .brand img{height:52px;width:auto;border-radius:10px;}
+  nav.links{display:flex;gap:8px;align-items:center;}
+  nav.links a{
+    font-size:0.9rem;font-weight:500;color:var(--gray);transition:color .2s;
+    padding:8px 14px;border-radius:100px;position:relative;
+  }
+  nav.links a:hover{color:var(--white);}
+  nav.links a.active{color:var(--white);background:var(--black-2);}
+  .nav-cta{
+    display:flex;align-items:center;gap:8px;
+    background:var(--red);color:var(--white);
+    padding:10px 18px;border-radius:100px;
+    font-weight:600;font-size:0.86rem;
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .nav-cta:hover{transform:translateY(-1px);box-shadow:0 6px 18px -4px var(--red-glow);}
+  .burger{display:none;background:none;border:none;color:var(--white);font-size:1.5rem;cursor:pointer;line-height:0;}
+
+  @media (max-width:860px){
+    nav.links{
+      position:fixed;top:84px;left:0;right:0;
+      background:var(--black-2);
+      flex-direction:column;align-items:stretch;gap:0;
+      max-height:0;overflow:hidden;
+      transition:max-height .3s ease;
+      border-bottom:1px solid var(--line);
+    }
+    nav.links.open{max-height:320px;}
+    nav.links a{padding:16px 28px;border-top:1px solid var(--line);border-radius:0;}
+    .burger{display:block;}
+    .nav-cta.desktop-only{display:none;}
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;z-index:1;
+    padding:92px 0 76px;
+    display:grid;grid-template-columns:1.05fr 0.95fr;gap:56px;align-items:center;
+  }
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:10px;
+    color:var(--red);font-size:0.76rem;font-weight:600;
+    text-transform:uppercase;letter-spacing:0.14em;margin-bottom:20px;
+  }
+  .eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--red);box-shadow:0 0 12px var(--red);}
+  .eyebrow .dot.pulse{animation:pulse-dot 1.8s ease infinite;}
+  @keyframes pulse-dot{0%,100%{opacity:1;}50%{opacity:.35;}}
+  .hero h1{
+    font-size:clamp(2.3rem,4.4vw,3.7rem);
+    font-weight:900;line-height:1.06;letter-spacing:-0.015em;margin-bottom:20px;
+  }
+  .hero h1 em{
+    font-style:normal;
+    background:linear-gradient(180deg, var(--red-bright) 0%, var(--red-dark) 100%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .hero p.lead{font-size:1.06rem;color:var(--gray);max-width:500px;line-height:1.65;margin-bottom:32px;}
+  .hero-ctas{display:flex;gap:14px;flex-wrap:wrap;}
+  .btn{
+    display:inline-flex;align-items:center;gap:9px;
+    padding:15px 24px;border-radius:12px;font-weight:600;font-size:0.93rem;
+    transition:transform .15s ease, box-shadow .15s ease, background .15s ease, border-color .15s ease;
+    border:1px solid transparent;cursor:pointer;
+  }
+  .btn-primary{background:var(--red);color:var(--white);box-shadow:0 8px 24px -8px var(--red-glow);}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 28px -6px var(--red-glow);background:var(--red-bright);}
+  .btn-ghost{border-color:var(--line-2);color:var(--white);background:transparent;}
+  .btn-ghost:hover{border-color:var(--gray-dim);background:var(--black-2);}
+  .btn:active{transform:translateY(0) scale(.98);}
+
+  /* ---- HERO VISUAL: monitoring panel (signature element) ---- */
+  .monitor{
+    position:relative;background:var(--black-2);border:1px solid var(--line-2);
+    border-radius:20px;padding:16px;box-shadow:0 30px 70px -20px rgba(0,0,0,.6);
+  }
+  .monitor-bar{display:flex;align-items:center;justify-content:space-between;padding:4px 8px 14px;}
+  .monitor-bar-left{display:flex;align-items:center;gap:9px;}
+  .monitor-bar-left .rec{width:8px;height:8px;border-radius:50%;background:var(--red);animation:pulse-dot 1.4s ease infinite;}
+  .monitor-bar-left span{font-size:0.72rem;color:var(--gray);letter-spacing:.08em;}
+  .monitor-bar-right{display:flex;gap:5px;}
+  .monitor-bar-right i{width:6px;height:6px;border-radius:50%;background:var(--line-2);display:block;}
+  .feeds{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+  .feed{
+    position:relative;aspect-ratio:4/3;border-radius:10px;overflow:hidden;
+    background:linear-gradient(160deg,#101012,#1a1a1d);
+    border:1px solid var(--line);
+    display:flex;flex-direction:column;justify-content:flex-end;padding:9px;
+  }
+  .feed .scan{
+    position:absolute;left:0;right:0;height:40%;
+    background:linear-gradient(180deg, rgba(225,38,28,0.16), transparent);
+    animation:scan 3.2s linear infinite;
+  }
+  .feed:nth-child(2) .scan{animation-delay:.6s;}
+  .feed:nth-child(3) .scan{animation-delay:1.3s;}
+  .feed:nth-child(4) .scan{animation-delay:2s;}
+  @keyframes scan{0%{top:-40%;}100%{top:100%;}}
+  .feed-label{position:relative;z-index:1;display:flex;align-items:center;gap:6px;font-size:0.68rem;color:var(--white);font-weight:600;}
+  .feed-label svg{width:13px;height:13px;color:var(--red);flex-shrink:0;}
+  .feed-status{position:absolute;top:8px;right:8px;font-size:0.6rem;color:var(--green);display:flex;align-items:center;gap:4px;z-index:1;}
+  .feed-status i{width:5px;height:5px;border-radius:50%;background:var(--green);}
+  .monitor-foot{display:flex;justify-content:space-between;align-items:center;padding:14px 8px 4px;}
+  .monitor-foot span{font-size:0.72rem;color:var(--gray-dim);}
+  .signal-bars{display:flex;align-items:flex-end;gap:2px;height:12px;}
+  .signal-bars i{width:3px;background:var(--green);border-radius:1px;}
+  .signal-bars i:nth-child(1){height:35%;}
+  .signal-bars i:nth-child(2){height:60%;}
+  .signal-bars i:nth-child(3){height:85%;}
+  .signal-bars i:nth-child(4){height:100%;}
+
+  @media (prefers-reduced-motion: reduce){
+    .feed .scan, .rec, .eyebrow .dot.pulse{animation:none !important;}
+  }
+  @media (max-width:900px){
+    .hero{grid-template-columns:1fr;padding:52px 0 44px;text-align:left;}
+    .monitor{max-width:400px;}
+  }
+
+  /* ---------- SECTION HEADERS ---------- */
+  .section{position:relative;z-index:1;padding:96px 0;}
+  .section-head{max-width:640px;margin-bottom:48px;}
+  .section-head .eyebrow{margin-bottom:16px;}
+  .section-head h2{font-size:clamp(1.85rem,3.2vw,2.5rem);font-weight:800;letter-spacing:-0.01em;margin-bottom:14px;}
+  .section-head p{color:var(--gray);font-size:1rem;line-height:1.6;}
+
+  /* ---------- FILTER TABS ---------- */
+  .filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:32px;}
+  .filter-btn{
+    background:var(--black-2);border:1px solid var(--line);color:var(--gray);
+    padding:9px 18px;border-radius:100px;font-size:0.86rem;font-weight:600;cursor:pointer;
+    transition:all .18s ease;
+  }
+  .filter-btn:hover{border-color:var(--line-2);color:var(--white);}
+  .filter-btn.active{background:var(--red);border-color:var(--red);color:var(--white);}
+
+  /* ---------- SERVICES CATALOG ---------- */
+  #servicios{background:linear-gradient(180deg, transparent, rgba(140,23,18,0.05) 40%, transparent);}
+  .catalog{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+  @media (max-width:980px){.catalog{grid-template-columns:repeat(2,1fr);}}
+  @media (max-width:680px){.catalog{grid-template-columns:1fr;}}
+
+  .svc-card{
+    position:relative;
+    background:var(--black-2);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:24px 22px 20px;
+    transition:border-color .2s ease, transform .25s var(--ease), background .2s ease, box-shadow .25s ease;
+    display:flex;flex-direction:column;
+  }
+  .svc-card.hidden-cat{display:none;}
+  .svc-card:hover{border-color:rgba(225,38,28,0.4);transform:translateY(-4px);box-shadow:0 16px 32px -14px rgba(0,0,0,.5);}
+  .svc-card.selected{border-color:var(--red);background:var(--black-3);box-shadow:0 0 0 1px var(--red) inset;}
+  .svc-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px;}
+  .svc-icon{
+    width:46px;height:46px;border-radius:12px;
+    background:rgba(225,38,28,0.12);
+    display:flex;align-items:center;justify-content:center;color:var(--red);
+    flex-shrink:0;transition:background .2s ease, transform .2s ease;
+  }
+  .svc-card:hover .svc-icon{background:rgba(225,38,28,0.22);transform:scale(1.06);}
+  .svc-code{font-size:0.68rem;color:var(--gray-dim);}
+  .svc-card h3{font-size:1.1rem;font-weight:700;margin-bottom:8px;letter-spacing:-0.01em;}
+  .svc-card p.desc{color:var(--gray);font-size:0.89rem;line-height:1.55;margin-bottom:14px;}
+
+  .svc-details{max-height:0;overflow:hidden;transition:max-height .35s ease;}
+  .svc-details ul{list-style:none;margin-bottom:4px;}
+  .svc-details li{
+    font-size:0.84rem;color:var(--gray);padding:7px 0 7px 20px;position:relative;
+    border-top:1px solid var(--line);
+  }
+  .svc-details li:first-child{border-top:none;}
+  .svc-details li::before{content:'+';position:absolute;left:0;color:var(--red);font-weight:700;}
+  .svc-card.open .svc-details{max-height:260px;}
+
+  .svc-actions{display:flex;align-items:center;justify-content:space-between;margin-top:16px;gap:10px;}
+  .toggle-details{
+    background:none;border:none;color:var(--gray);font-size:0.81rem;font-weight:600;
+    cursor:pointer;display:flex;align-items:center;gap:6px;padding:4px 0;
+  }
+  .toggle-details:hover{color:var(--white);}
+  .toggle-details svg{transition:transform .25s ease;width:14px;height:14px;}
+  .svc-card.open .toggle-details svg{transform:rotate(180deg);}
+
+  .select-check{display:flex;align-items:center;gap:8px;cursor:pointer;font-size:0.81rem;font-weight:600;color:var(--white);user-select:none;}
+  .select-check input{position:absolute;opacity:0;width:1px;height:1px;}
+  .checkbox-box{
+    width:20px;height:20px;border-radius:6px;border:1.5px solid var(--gray-dim);
+    display:flex;align-items:center;justify-content:center;transition:all .15s ease;flex-shrink:0;
+  }
+  .select-check input:checked + .checkbox-box{background:var(--red);border-color:var(--red);}
+  .checkbox-box svg{width:12px;height:12px;opacity:0;transition:opacity .1s;}
+  .select-check input:checked + .checkbox-box svg{opacity:1;}
+  .select-check input:focus-visible + .checkbox-box{outline:2px solid var(--red);outline-offset:2px;}
+
+  /* ---------- PROCESS (Cómo trabajamos) ---------- */
+  #proceso{border-top:1px solid var(--line);}
+  .process-list{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;}
+  @media (max-width:900px){.process-list{grid-template-columns:1fr 1fr;}}
+  @media (max-width:560px){.process-list{grid-template-columns:1fr;}}
+  .process-item{
+    padding:30px 24px;border-right:1px solid var(--line);position:relative;background:var(--black-2);
+    transition:background .2s ease;
+  }
+  .process-item:hover{background:var(--black-3);}
+  .process-item:last-child{border-right:none;}
+  @media (max-width:900px){.process-item:nth-child(2){border-right:none;}.process-item:nth-child(2n+1){border-right:1px solid var(--line);}}
+  @media (max-width:560px){.process-item{border-right:none !important;border-bottom:1px solid var(--line);}.process-item:last-child{border-bottom:none;}}
+  .process-num{font-family:'Poppins';font-weight:900;font-size:1.6rem;color:var(--red);opacity:.85;display:block;margin-bottom:14px;}
+  .process-item h4{font-size:1.02rem;font-weight:700;margin-bottom:8px;}
+  .process-item p{font-size:0.86rem;color:var(--gray);line-height:1.55;}
+  .process-arrow{position:absolute;top:30px;right:-13px;z-index:2;color:var(--gray-dim);}
+  @media (max-width:900px){.process-arrow{display:none;}}
+
+  /* ---------- STICKY QUOTE BAR ---------- */
+  .quote-bar{
+    position:fixed;bottom:0;left:0;right:0;z-index:60;
+    background:var(--black-2);
+    border-top:1px solid rgba(225,38,28,0.35);
+    box-shadow:0 -12px 40px -12px rgba(0,0,0,0.6);
+    transform:translateY(110%);
+    transition:transform .35s var(--ease);
+  }
+  .quote-bar.show{transform:translateY(0);}
+  .quote-bar-inner{max-width:var(--maxw);margin:0 auto;padding:14px 28px;}
+  .quote-top-row{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;}
+  .quote-info{display:flex;align-items:center;gap:14px;min-width:0;}
+  .quote-count{
+    width:32px;height:32px;border-radius:50%;background:var(--red);
+    display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.86rem;flex-shrink:0;
+  }
+  .quote-chips{display:flex;gap:6px;flex-wrap:wrap;overflow:hidden;max-height:26px;}
+  .chip{
+    display:flex;align-items:center;gap:6px;background:var(--black-3);border:1px solid var(--line-2);
+    padding:5px 6px 5px 11px;border-radius:100px;font-size:0.76rem;color:var(--white);white-space:nowrap;
+  }
+  .chip button{background:none;border:none;color:var(--gray);cursor:pointer;font-size:0.9rem;line-height:1;padding:2px 4px;border-radius:50%;}
+  .chip button:hover{color:var(--white);background:var(--black-4);}
+  .quote-actions{display:flex;gap:10px;align-items:center;flex-shrink:0;}
+  .btn-text{background:none;border:none;color:var(--gray);font-size:0.83rem;font-weight:600;cursor:pointer;padding:8px 4px;}
+  .btn-text:hover{color:var(--white);}
+  .quote-bar .btn{padding:12px 20px;font-size:0.89rem;}
+  .preview-box{
+    max-height:0;overflow:hidden;transition:max-height .3s ease;
+  }
+  .preview-box.open{max-height:160px;margin-top:12px;}
+  .preview-box pre{
+    background:var(--black);border:1px solid var(--line);border-radius:10px;padding:14px 16px;
+    font-family:'JetBrains Mono',monospace;font-size:0.76rem;color:var(--gray);white-space:pre-wrap;line-height:1.6;
+  }
+
+  /* ---------- VISION / MISION ---------- */
+  #nosotros{background:var(--black-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+  .vm-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;}
+  @media (max-width:800px){.vm-grid{grid-template-columns:1fr;}}
+  .vm-card{
+    background:var(--black);border:1px solid var(--line);border-radius:var(--radius);
+    padding:34px 32px;position:relative;overflow:hidden;transition:border-color .2s ease;
+  }
+  .vm-card:hover{border-color:var(--line-2);}
+  .vm-card::before{
+    content:'';position:absolute;top:-60px;right:-60px;width:180px;height:180px;
+    background:radial-gradient(circle, var(--red-glow), transparent 70%);opacity:0.5;
+  }
+  .vm-icon{color:var(--red);margin-bottom:18px;}
+  .vm-card h3{font-size:1.25rem;font-weight:800;margin-bottom:12px;}
+  .vm-card p{color:var(--gray);line-height:1.7;font-size:0.96rem;position:relative;z-index:1;}
+
+  /* ---------- STRIP ---------- */
+  .strip{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;}
+  @media (max-width:800px){.strip{grid-template-columns:repeat(2,1fr);}}
+  .strip-item{padding:26px 20px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);}
+  .strip-item:nth-child(4){border-right:none;}
+  @media (max-width:800px){.strip-item:nth-child(2n){border-right:none;}}
+  .strip-item .num{font-family:'Poppins';font-weight:900;font-size:1.8rem;color:var(--red);display:block;margin-bottom:6px;}
+  .strip-item .lbl{font-size:0.84rem;color:var(--gray);}
+
+  /* ---------- FAQ ---------- */
+  .faq-list{border-top:1px solid var(--line);}
+  .faq-item{border-bottom:1px solid var(--line);}
+  .faq-q{
+    width:100%;text-align:left;background:none;border:none;color:var(--white);
+    padding:22px 4px;font-size:1rem;font-weight:600;cursor:pointer;
+    display:flex;justify-content:space-between;align-items:center;gap:16px;
+  }
+  .faq-q svg{width:16px;height:16px;color:var(--red);flex-shrink:0;transition:transform .3s ease;}
+  .faq-item.open .faq-q svg{transform:rotate(45deg);}
+  .faq-a{max-height:0;overflow:hidden;transition:max-height .35s ease;}
+  .faq-a p{padding:0 4px 22px;color:var(--gray);font-size:0.92rem;line-height:1.6;max-width:640px;}
+  .faq-item.open .faq-a{max-height:200px;}
+
+  /* ---------- CONTACT / CTA ---------- */
+  #contacto{text-align:center;}
+  .cta-box{
+    background:linear-gradient(160deg, var(--black-3), var(--black-2));
+    border:1px solid var(--line);border-radius:24px;
+    padding:64px 40px;position:relative;overflow:hidden;
+  }
+  .cta-box::after{
+    content:'';position:absolute;bottom:-100px;left:50%;transform:translateX(-50%);
+    width:500px;height:220px;background:radial-gradient(ellipse, var(--red-glow), transparent 70%);
+  }
+  .cta-box h2{font-size:clamp(1.75rem,3.2vw,2.4rem);font-weight:800;margin-bottom:16px;position:relative;z-index:1;}
+  .cta-box p{color:var(--gray);max-width:480px;margin:0 auto 28px;position:relative;z-index:1;}
+  .cta-box .hero-ctas{justify-content:center;position:relative;z-index:1;}
+
+  /* ---------- FOOTER ---------- */
+  footer{border-top:1px solid var(--line);padding:44px 0 30px;position:relative;z-index:1;}
+  .foot-grid{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:32px;margin-bottom:30px;}
+  .foot-brand{
+    display:inline-flex;align-items:center;
+    background:var(--black-2);border:1px solid var(--line-2);
+    border-radius:14px;padding:8px 14px;
+  }
+  .foot-brand img{height:34px;border-radius:8px;}
+  .foot-cols{display:flex;gap:54px;flex-wrap:wrap;}
+  .foot-col h4{font-size:0.78rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--gray-dim);margin-bottom:14px;}
+  .foot-col a,.foot-col p{display:block;font-size:0.89rem;color:var(--gray);margin-bottom:9px;}
+  .foot-col a:hover{color:var(--white);}
+  .foot-bottom{
+    border-top:1px solid var(--line);padding-top:20px;
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;
+    font-size:0.78rem;color:var(--gray-dim);
+  }
+
+  /* ---------- FLOATING WHATSAPP ---------- */
+  .wa-float{
+    position:fixed;bottom:24px;right:24px;z-index:70;
+    width:58px;height:58px;border-radius:50%;
+    background:#25D366;display:flex;align-items:center;justify-content:center;
+    box-shadow:0 10px 30px -6px rgba(37,211,102,0.55);
+    transition:transform .2s ease, bottom .3s var(--ease);
+  }
+  .wa-float:hover{transform:scale(1.07);}
+  .wa-float svg{width:29px;height:29px;fill:white;}
+  body.bar-visible .wa-float{bottom:calc(var(--bar-h, 76px) + 18px);}
+
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{animation-duration:0.01ms !important;transition-duration:0.01ms !important;}
+    .reveal, .reveal-stagger > *{opacity:1 !important;transform:none !important;}
+  }
+
+  @media (max-width:560px){
+    .section{padding:60px 0;}
+    .vm-card{padding:26px 22px;}
+    .cta-box{padding:44px 22px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="grid-bg"></div>
+<div class="progress" id="progressBar"></div>
+
+<header>
+  <div class="wrap nav">
+    <a href="#inicio" class="brand">
+      <span class="brand-badge"><img src="C:\Users\Monto\Downloads\Compu\logo2.png" alt="ComProtec"></span>
+    </a>
+    <nav class="links" id="navLinks">
+      <a href="#servicios" data-nav>Servicios</a>
+      <a href="#proceso" data-nav>Proceso</a>
+      <a href="#nosotros" data-nav>Nosotros</a>
+      <a href="#contacto" data-nav>Contacto</a>
+      <a href="https://wa.me/5219930000000" class="nav-cta" style="margin-top:8px;">Escribir por WhatsApp</a>
+    </nav>
+    <a href="https://wa.me/5219930000000" class="nav-cta desktop-only">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.28-1.38a9.9 9.9 0 0 0 4.76 1.21h.01c5.46 0 9.9-4.45 9.9-9.91C21.96 6.45 17.5 2 12.04 2z"/></svg>
+      WhatsApp
+    </a>
+    <button class="burger" id="burgerBtn" aria-label="Abrir menú" aria-expanded="false">&#9776;</button>
+  </div>
+</header>
+
+<main>
+
+  <!-- ============ HERO ============ -->
+  <section class="hero wrap" id="inicio">
+    <div>
+      <div class="eyebrow"><span class="dot pulse"></span> Computadoras · Proyectos · Tecnología</div>
+      <h1>Seguridad y tecnología que <em>protegen</em> tu negocio y tu hogar.</h1>
+      <p class="lead">Diseñamos, instalamos y damos mantenimiento a cámaras, cercos eléctricos, redes y cableado estructurado, además de distribuir Soft Restaurant. Todo con un solo aliado, en todo México.</p>
+      <div class="hero-ctas">
+        <a href="#servicios" class="btn btn-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3h15l-1.5 9h-13.5"/><circle cx="9" cy="20" r="1.5" fill="currentColor" stroke="none"/><circle cx="18" cy="20" r="1.5" fill="currentColor" stroke="none"/><path d="M3 3H1.5M6 3l-1 6.5L6 15h12"/></svg>
+          Ver catálogo de servicios
+        </a>
+        <a href="https://wa.me/5219930000000?text=Hola%2C%20quiero%20informaci%C3%B3n%20sobre%20los%20servicios%20de%20ComProtec" class="btn btn-ghost">
+          Hablar con un asesor
+        </a>
+      </div>
+    </div>
+
+    <div class="monitor" role="img" aria-label="Panel de monitoreo mostrando cámaras, red, cerco eléctrico y punto de venta en línea">
+      <div class="monitor-bar">
+        <div class="monitor-bar-left"><span class="rec"></span><span class="mono">COMPROTEC · EN VIVO</span></div>
+        <div class="monitor-bar-right"><i></i><i></i><i></i></div>
+      </div>
+      <div class="feeds">
+        <div class="feed">
+          <div class="scan"></div>
+          <div class="feed-status"><i></i>ON</div>
+          <div class="feed-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="14" height="10" rx="2"/><path d="M16 10.5l5-3v9l-5-3"/></svg>Cámara 01</div>
+        </div>
+        <div class="feed">
+          <div class="scan"></div>
+          <div class="feed-status"><i></i>ON</div>
+          <div class="feed-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="2"/><circle cx="5" cy="19" r="2"/><circle cx="19" cy="19" r="2"/><path d="M12 7v6M12 13L6 17.5M12 13l6 4.5"/></svg>Red LAN</div>
+        </div>
+        <div class="feed">
+          <div class="scan"></div>
+          <div class="feed-status"><i></i>ON</div>
+          <div class="feed-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20V6M12 20V4M20 20V6M4 10h16M4 16h16"/></svg>Cerco eléctrico</div>
+        </div>
+        <div class="feed">
+          <div class="scan"></div>
+          <div class="feed-status"><i></i>ON</div>
+          <div class="feed-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>Soft Restaurant</div>
+        </div>
+      </div>
+      <div class="monitor-foot">
+        <span class="mono">4/4 sistemas activos</span>
+        <div class="signal-bars"><i></i><i></i><i></i><i></i></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ STRIP ============ -->
+  <section class="wrap reveal" style="padding-bottom:20px;">
+    <div class="strip">
+      <div class="strip-item"><span class="num">5</span><span class="lbl">Líneas de servicio integradas</span></div>
+      <div class="strip-item"><span class="num">100%</span><span class="lbl">Cobertura en todo México</span></div>
+      <div class="strip-item"><span class="num">24/7</span><span class="lbl">Monitoreo y soporte disponible</span></div>
+      <div class="strip-item"><span class="num">1</span><span class="lbl">Aliado para negocio y hogar</span></div>
+    </div>
+  </section>
+
+  <!-- ============ CATÁLOGO DE SERVICIOS ============ -->
+  <section class="section" id="servicios">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div class="eyebrow"><span class="dot"></span> Catálogo</div>
+        <h2>Elige lo que tu negocio necesita.</h2>
+        <p>Filtra por categoría, marca los servicios que te interesan y arma tu solicitud. Al final, la enviamos directo a WhatsApp con todo lo que elegiste.</p>
+      </div>
+
+      <div class="filters reveal">
+        <button class="filter-btn active" data-filter="todos">Todos</button>
+        <button class="filter-btn" data-filter="seguridad">Seguridad</button>
+        <button class="filter-btn" data-filter="redes">Redes</button>
+        <button class="filter-btn" data-filter="software">Software</button>
+        <button class="filter-btn" data-filter="equipo">Equipo</button>
+      </div>
+
+      <div class="catalog reveal-stagger" id="catalog">
+
+        <!-- 1 -->
+        <article class="svc-card" data-name="Proyectos y equipo de cómputo" data-cat="equipo">
+          <div class="svc-top">
+            <div class="svc-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg>
+            </div>
+            <span class="svc-code mono">SVC-01</span>
+          </div>
+          <h3>Proyectos y computadoras</h3>
+          <p class="desc">Venta, ensamble y mantenimiento de equipo de cómputo, más proyectos tecnológicos a la medida para tu empresa u hogar.</p>
+          <div class="svc-details">
+            <ul>
+              <li>Venta y armado de equipos de cómputo</li>
+              <li>Mantenimiento preventivo y correctivo</li>
+              <li>Diagnóstico e implementación de proyectos a medida</li>
+              <li>Asesoría técnica previa a la compra</li>
+            </ul>
+          </div>
+          <div class="svc-actions">
+            <button class="toggle-details" onclick="toggleCard(this)" aria-expanded="false">
+              Ver detalles
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <label class="select-check">
+              <input type="checkbox" onchange="toggleSelect(this)">
+              <span class="checkbox-box"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></span>
+              Agregar
+            </label>
+          </div>
+        </article>
+
+        <!-- 2 -->
+        <article class="svc-card" data-name="Cámaras de seguridad" data-cat="seguridad">
+          <div class="svc-top">
+            <div class="svc-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="7" width="14" height="10" rx="2"/><path d="M16 10.5l5-3v9l-5-3"/></svg>
+            </div>
+            <span class="svc-code mono">SVC-02</span>
+          </div>
+          <h3>Cámaras de seguridad</h3>
+          <p class="desc">Instalación de sistemas CCTV con monitoreo remoto desde tu celular, para negocios, casas y fraccionamientos.</p>
+          <div class="svc-details">
+            <ul>
+              <li>Cámaras IP y análogas HD / 4K</li>
+              <li>Grabación en NVR/DVR o nube</li>
+              <li>Visualización remota desde app móvil</li>
+              <li>Mantenimiento y ampliación de sistemas existentes</li>
+            </ul>
+          </div>
+          <div class="svc-actions">
+            <button class="toggle-details" onclick="toggleCard(this)" aria-expanded="false">
+              Ver detalles
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <label class="select-check">
+              <input type="checkbox" onchange="toggleSelect(this)">
+              <span class="checkbox-box"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></span>
+              Agregar
+            </label>
+          </div>
+        </article>
+
+        <!-- 3 -->
+        <article class="svc-card" data-name="Cercos eléctricos" data-cat="seguridad">
+          <div class="svc-top">
+            <div class="svc-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 20V6M12 20V4M20 20V6M4 10h16M4 16h16"/></svg>
+            </div>
+            <span class="svc-code mono">SVC-03</span>
+          </div>
+          <h3>Cercos eléctricos</h3>
+          <p class="desc">Protección perimetral disuasiva para casas, bodegas y negocios, integrada a central de alarma.</p>
+          <div class="svc-details">
+            <ul>
+              <li>Instalación en bardas, techos y perímetros</li>
+              <li>Central de alarma con sirena y aviso</li>
+              <li>Integración con cámaras existentes</li>
+              <li>Mantenimiento y revisión periódica</li>
+            </ul>
+          </div>
+          <div class="svc-actions">
+            <button class="toggle-details" onclick="toggleCard(this)" aria-expanded="false">
+              Ver detalles
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <label class="select-check">
+              <input type="checkbox" onchange="toggleSelect(this)">
+              <span class="checkbox-box"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></span>
+              Agregar
+            </label>
+          </div>
+        </article>
+
+        <!-- 4 -->
+        <article class="svc-card" data-name="Redes e infraestructura" data-cat="redes">
+          <div class="svc-top">
+            <div class="svc-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="5" r="2"/><circle cx="5" cy="19" r="2"/><circle cx="19" cy="19" r="2"/><path d="M12 7v6M12 13L6 17.5M12 13l6 4.5"/></svg>
+            </div>
+            <span class="svc-code mono">SVC-04</span>
+          </div>
+          <h3>Redes e infraestructura</h3>
+          <p class="desc">Cableado estructurado, redes LAN/WiFi y racks organizados para que tu conexión no falle cuando más la necesitas.</p>
+          <div class="svc-details">
+            <ul>
+              <li>Cableado estructurado certificado</li>
+              <li>Redes LAN, WiFi y puntos de acceso</li>
+              <li>Instalación y organización de racks y switches</li>
+              <li>Diagnóstico de redes con fallas o lentitud</li>
+            </ul>
+          </div>
+          <div class="svc-actions">
+            <button class="toggle-details" onclick="toggleCard(this)" aria-expanded="false">
+              Ver detalles
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <label class="select-check">
+              <input type="checkbox" onchange="toggleSelect(this)">
+              <span class="checkbox-box"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></span>
+              Agregar
+            </label>
+          </div>
+        </article>
+
+        <!-- 5 -->
+        <article class="svc-card" data-name="Soft Restaurant" data-cat="software">
+          <div class="svc-top">
+            <div class="svc-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>
+            </div>
+            <span class="svc-code mono">SVC-05</span>
+          </div>
+          <h3>Distribución Soft Restaurant</h3>
+          <p class="desc">Venta, instalación y capacitación del software punto de venta líder para restaurantes y negocios de alimentos.</p>
+          <div class="svc-details">
+            <ul>
+              <li>Licencias oficiales Soft Restaurant</li>
+              <li>Instalación y configuración de menú y caja</li>
+              <li>Capacitación a tu equipo de trabajo</li>
+              <li>Soporte técnico continuo</li>
+            </ul>
+          </div>
+          <div class="svc-actions">
+            <button class="toggle-details" onclick="toggleCard(this)" aria-expanded="false">
+              Ver detalles
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <label class="select-check">
+              <input type="checkbox" onchange="toggleSelect(this)">
+              <span class="checkbox-box"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></span>
+              Agregar
+            </label>
+          </div>
+        </article>
+
+        <!-- 6 -->
+        <article class="svc-card" data-name="Mantenimiento y soporte" data-cat="equipo">
+          <div class="svc-top">
+            <div class="svc-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14.7 6.3a4 4 0 0 1-5.4 5.4L4 17v3h3l5.3-5.3a4 4 0 0 1 5.4-5.4l-2.4 2.4-2-2 2.4-2.4z"/></svg>
+            </div>
+            <span class="svc-code mono">SVC-06</span>
+          </div>
+          <h3>Mantenimiento y soporte</h3>
+          <p class="desc">Planes de revisión periódica para que tus cámaras, cercos, redes y equipos sigan funcionando sin sorpresas.</p>
+          <div class="svc-details">
+            <ul>
+              <li>Visitas de mantenimiento programadas</li>
+              <li>Atención prioritaria ante fallas</li>
+              <li>Actualización y respaldo de configuraciones</li>
+              <li>Reporte de estado de tus equipos</li>
+            </ul>
+          </div>
+          <div class="svc-actions">
+            <button class="toggle-details" onclick="toggleCard(this)" aria-expanded="false">
+              Ver detalles
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <label class="select-check">
+              <input type="checkbox" onchange="toggleSelect(this)">
+              <span class="checkbox-box"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></span>
+              Agregar
+            </label>
+          </div>
+        </article>
+
+      </div>
+
+      <p class="mono" id="emptyState" style="display:none;color:var(--gray-dim);font-size:0.85rem;padding:20px 2px;">No hay servicios en esta categoría todavía.</p>
+    </div>
+  </section>
+
+  <!-- ============ CÓMO TRABAJAMOS ============ -->
+  <section class="section" id="proceso" style="padding-top:0;">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div class="eyebrow"><span class="dot"></span> Proceso</div>
+        <h2>Cómo trabajamos, paso a paso.</h2>
+        <p>Cuatro pasos, sin vueltas, desde el primer mensaje hasta el soporte continuo.</p>
+      </div>
+      <div class="process-list reveal-stagger">
+        <div class="process-item">
+          <span class="process-num mono">01</span>
+          <h4>Diagnóstico</h4>
+          <p>Platicamos o visitamos tu sitio para entender qué necesitas y qué tienes instalado hoy.</p>
+          <svg class="process-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </div>
+        <div class="process-item">
+          <span class="process-num mono">02</span>
+          <h4>Propuesta</h4>
+          <p>Te enviamos una cotización clara por WhatsApp, con tiempos y alcance definidos.</p>
+          <svg class="process-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </div>
+        <div class="process-item">
+          <span class="process-num mono">03</span>
+          <h4>Instalación</h4>
+          <p>Ejecutamos el proyecto con equipo certificado y sin interrumpir tu operación diaria.</p>
+          <svg class="process-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </div>
+        <div class="process-item">
+          <span class="process-num mono">04</span>
+          <h4>Soporte</h4>
+          <p>Damos seguimiento y mantenimiento continuo para que todo siga funcionando.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ VISIÓN / MISIÓN ============ -->
+  <section class="section" id="nosotros">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div class="eyebrow"><span class="dot"></span> Quiénes somos</div>
+        <h2>Un aliado, no solo un proveedor.</h2>
+      </div>
+      <div class="vm-grid reveal-stagger">
+        <div class="vm-card">
+          <div class="vm-icon">
+            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>
+          </div>
+          <h3>Visión</h3>
+          <p>Ser el aliado tecnológico más confiable para tu negocio u hogar en todo México, destacando por soluciones integrales de seguridad, energía y redes, con soporte cercano y resultados consistentes.</p>
+        </div>
+        <div class="vm-card">
+          <div class="vm-icon">
+            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+          </div>
+          <h3>Misión</h3>
+          <p>Diseñar, instalar y mantener soluciones de cámaras, cercos eléctricos, redes y cableado estructurado, además de distribuir software especializado como Soft Restaurant, para mejorar la seguridad, la eficiencia y la gestión de nuestros clientes con calidad, rapidez y ética profesional.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FAQ ============ -->
+  <section class="section" style="padding-top:0;">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div class="eyebrow"><span class="dot"></span> Dudas frecuentes</div>
+        <h2>Antes de escribirnos.</h2>
+      </div>
+      <div class="faq-list reveal">
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false">
+            ¿Atienden fuera de Tabasco?
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+          </button>
+          <div class="faq-a"><p>Sí, damos cobertura en todo México. Cuéntanos tu ubicación por WhatsApp y te confirmamos tiempos.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false">
+            ¿Puedo pedir más de un servicio en la misma cotización?
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+          </button>
+          <div class="faq-a"><p>Claro. Selecciona todos los que necesites en el catálogo y te enviamos una sola propuesta integrada.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false">
+            ¿Dan mantenimiento a equipos que no instalaron ustedes?
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+          </button>
+          <div class="faq-a"><p>Sí. Revisamos tu instalación actual y te decimos qué se puede mantener y qué conviene actualizar.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CONTACTO ============ -->
+  <section class="section" id="contacto" style="padding-top:0;">
+    <div class="wrap">
+      <div class="cta-box reveal">
+        <h2>¿Ya sabes qué necesitas? Hablemos.</h2>
+        <p>Cuéntanos tu proyecto y te respondemos con una propuesta clara, sin compromiso.</p>
+        <div class="hero-ctas">
+          <a href="https://wa.me/5219930000000?text=Hola%2C%20quiero%20una%20cotizaci%C3%B3n%20con%20ComProtec" class="btn btn-primary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.28-1.38a9.9 9.9 0 0 0 4.76 1.21h.01c5.46 0 9.9-4.45 9.9-9.91C21.96 6.45 17.5 2 12.04 2z"/></svg>
+            Escribir por WhatsApp
+          </a>
+          <a href="#servicios" class="btn btn-ghost">Volver al catálogo</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <img src="assets/logo.png" alt="ComProtec">
+      </div>
+      <div class="foot-cols">
+        <div class="foot-col">
+          <h4>Servicios</h4>
+          <a href="#servicios">Cámaras de seguridad</a>
+          <a href="#servicios">Cercos eléctricos</a>
+          <a href="#servicios">Redes e infraestructura</a>
+          <a href="#servicios">Soft Restaurant</a>
+        </div>
+        <div class="foot-col">
+          <h4>Contacto</h4>
+          <p>WhatsApp: +52 993 000 0000</p>
+          <p>Tabasco, México</p>
+          <a href="https://wa.me/5219930000000">Enviar mensaje</a>
+        </div>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 ComProtec — Computadoras · Proyectos · Tecnología</span>
+      <span>Sitio en construcción · reemplaza el número de WhatsApp por el real</span>
+    </div>
+  </div>
+</footer>
+
+<a class="wa-float" href="https://wa.me/5219930000000" aria-label="Escribir por WhatsApp" target="_blank" rel="noopener">
+  <svg viewBox="0 0 24 24"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.28-1.38a9.9 9.9 0 0 0 4.76 1.21h.01c5.46 0 9.9-4.45 9.9-9.91C21.96 6.45 17.5 2 12.04 2zm5.62 13.6c-.24.68-1.19 1.25-1.95 1.41-.52.11-1.19.2-3.47-.75-2.91-1.2-4.79-4.15-4.94-4.35-.14-.19-1.18-1.57-1.18-3 0-1.42.74-2.12 1-2.41.24-.27.53-.34.71-.34.18 0 .35 0 .5.01.16.01.38-.06.6.46.24.57.81 1.98.88 2.12.07.14.12.31.02.5-.09.19-.14.31-.28.48-.14.16-.29.36-.42.49-.14.14-.28.28-.12.56.16.28.71 1.17 1.52 1.9 1.05.94 1.93 1.23 2.21 1.37.28.14.44.12.6-.07.16-.19.68-.79.87-1.06.18-.27.36-.22.6-.13.24.09 1.53.72 1.79.85.26.14.43.2.5.31.06.12.06.68-.18 1.36z"/></svg>
+</a>
+
+<div class="quote-bar" id="quoteBar">
+  <div class="quote-bar-inner">
+    <div class="quote-top-row">
+      <div class="quote-info">
+        <div class="quote-count" id="quoteCount">0</div>
+        <div class="quote-chips" id="quoteChips"></div>
+      </div>
+      <div class="quote-actions">
+        <button class="btn-text" id="previewToggle" onclick="togglePreview()">Vista previa</button>
+        <button class="btn-text" onclick="clearSelection()">Limpiar</button>
+        <a href="#" id="quoteSend" class="btn btn-primary" target="_blank" rel="noopener">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.28-1.38a9.9 9.9 0 0 0 4.76 1.21h.01c5.46 0 9.9-4.45 9.9-9.91C21.96 6.45 17.5 2 12.04 2z"/></svg>
+          Enviar por WhatsApp
+        </a>
+      </div>
+    </div>
+    <div class="preview-box" id="previewBox"><pre id="previewText"></pre></div>
+  </div>
+</div>
+
+<script>
+  // ====== CONFIG: reemplaza este número por el WhatsApp real de ComProtec ======
+  const WHATSAPP_NUMBER = "5219930000000";
+
+  /* Menú móvil */
+  const burgerBtn = document.getElementById('burgerBtn');
+  const navLinks = document.getElementById('navLinks');
+  burgerBtn.addEventListener('click', () => {
+    const isOpen = navLinks.classList.toggle('open');
+    burgerBtn.setAttribute('aria-expanded', isOpen);
+  });
+  navLinks.querySelectorAll('a[data-nav]').forEach(a => a.addEventListener('click', () => {
+    navLinks.classList.remove('open');
+    burgerBtn.setAttribute('aria-expanded', 'false');
+  }));
+
+  /* Scroll progress bar */
+  const progressBar = document.getElementById('progressBar');
+  function updateProgress(){
+    const h = document.documentElement;
+    const scrolled = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
+    progressBar.style.width = scrolled + '%';
+  }
+  document.addEventListener('scroll', updateProgress, {passive:true});
+
+  /* Scrollspy: resalta el link de nav de la sección visible */
+  const navAnchors = Array.from(document.querySelectorAll('a[data-nav]'));
+  const spySections = navAnchors.map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+  const spyObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      const id = '#' + entry.target.id;
+      const link = navAnchors.find(a => a.getAttribute('href') === id);
+      if(!link) return;
+      if(entry.isIntersecting){
+        navAnchors.forEach(a => a.classList.remove('active'));
+        link.classList.add('active');
+      }
+    });
+  }, {rootMargin:'-45% 0px -45% 0px'});
+  spySections.forEach(s => spyObserver.observe(s));
+
+  /* Scroll reveal */
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        entry.target.classList.add('in-view');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, {threshold:0.12});
+  document.querySelectorAll('.reveal, .reveal-stagger').forEach(el => revealObserver.observe(el));
+
+  /* Acordeón de detalles del catálogo */
+  function toggleCard(btn){
+    const card = btn.closest('.svc-card');
+    const nowOpen = card.classList.toggle('open');
+    btn.firstChild.textContent = nowOpen ? 'Ocultar detalles ' : 'Ver detalles ';
+    btn.setAttribute('aria-expanded', nowOpen);
+  }
+
+  /* FAQ acordeón */
+  function toggleFaq(btn){
+    const item = btn.closest('.faq-item');
+    const nowOpen = item.classList.toggle('open');
+    btn.setAttribute('aria-expanded', nowOpen);
+  }
+
+  /* Filtros de catálogo */
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  const cards = document.querySelectorAll('.svc-card');
+  const emptyState = document.getElementById('emptyState');
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const filter = btn.getAttribute('data-filter');
+      let visibleCount = 0;
+      cards.forEach(card => {
+        const match = filter === 'todos' || card.getAttribute('data-cat') === filter;
+        card.classList.toggle('hidden-cat', !match);
+        if(match) visibleCount++;
+      });
+      emptyState.style.display = visibleCount === 0 ? 'block' : 'none';
+    });
+  });
+
+  /* Selección para cotización */
+  const selected = new Set();
+  const quoteBar = document.getElementById('quoteBar');
+  const quoteCount = document.getElementById('quoteCount');
+  const quoteChips = document.getElementById('quoteChips');
+  const quoteSend = document.getElementById('quoteSend');
+  const previewBox = document.getElementById('previewBox');
+  const previewText = document.getElementById('previewText');
+  const previewToggle = document.getElementById('previewToggle');
+  const body = document.body;
+  let previewOpen = false;
+
+  function buildMessage(){
+    const list = Array.from(selected);
+    return `Hola, quiero cotizar los siguientes servicios de ComProtec:\n- ${list.join('\n- ')}\n\n¿Me pueden apoyar con más información?`;
+  }
+
+  function setCardSelected(name, isSelected){
+    document.querySelectorAll('.svc-card').forEach(card => {
+      if(card.getAttribute('data-name') === name){
+        card.classList.toggle('selected', isSelected);
+        const input = card.querySelector('.select-check input');
+        if(input) input.checked = isSelected;
+      }
+    });
+  }
+
+  function toggleSelect(input){
+    const card = input.closest('.svc-card');
+    const name = card.getAttribute('data-name');
+    if(input.checked){ selected.add(name); card.classList.add('selected'); }
+    else { selected.delete(name); card.classList.remove('selected'); }
+    updateQuoteBar();
+  }
+
+  function removeFromSelection(name){
+    selected.delete(name);
+    setCardSelected(name, false);
+    updateQuoteBar();
+  }
+
+  function clearSelection(){
+    const names = Array.from(selected);
+    selected.clear();
+    names.forEach(n => setCardSelected(n, false));
+    updateQuoteBar();
+  }
+
+  function togglePreview(){
+    previewOpen = !previewOpen;
+    previewBox.classList.toggle('open', previewOpen);
+    previewText.textContent = buildMessage();
+    previewToggle.textContent = previewOpen ? 'Ocultar' : 'Vista previa';
+  }
+
+  function updateQuoteBar(){
+    const count = selected.size;
+    quoteCount.textContent = count;
+
+    if(count === 0){
+      quoteBar.classList.remove('show');
+      body.classList.remove('bar-visible');
+      quoteChips.innerHTML = '';
+      previewBox.classList.remove('open');
+      previewOpen = false;
+      previewToggle.textContent = 'Vista previa';
+      return;
+    }
+
+    body.classList.add('bar-visible');
+    quoteBar.classList.add('show');
+
+    quoteChips.innerHTML = '';
+    selected.forEach(name => {
+      const chip = document.createElement('span');
+      chip.className = 'chip';
+      chip.innerHTML = `${name} <button type="button" aria-label="Quitar ${name}">&times;</button>`;
+      chip.querySelector('button').addEventListener('click', () => removeFromSelection(name));
+      quoteChips.appendChild(chip);
+    });
+
+    const message = buildMessage();
+    quoteSend.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+    if(previewOpen) previewText.textContent = message;
+
+    requestAnimationFrame(() => {
+      document.documentElement.style.setProperty('--bar-h', quoteBar.offsetHeight + 'px');
+    });
+  }
+</script>
+
+</body>
+</html>
